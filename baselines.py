@@ -55,6 +55,22 @@ EXPERT_CONSTRAINTS = {
         "RANGE(hours_per_week, 1, 99, inclusive)",
         "FUNCTIONAL_DEPENDENCY(education -> education_num)",
     ],
+    "wine_quality": [
+        "NOT_NULL(pH)",
+        "RANGE(pH, 2.5, 4.5, inclusive)",
+        "NOT_NULL(alcohol)",
+        "RANGE(alcohol, 8.0, 15.0, inclusive)",
+        "RANGE(quality, 3, 8, inclusive)",
+        "RANGE(free sulfur dioxide, 0, 80, inclusive)",
+    ],
+    "german_credit": [
+        "NOT_NULL(age)",
+        "RANGE(age, 18, 90, inclusive)",
+        "NOT_NULL(credit_amount)",
+        "RANGE(credit_amount, 100, 25000, inclusive)",
+        "RANGE(duration, 1, 120, inclusive)",
+        "NOT_NULL(class)",
+    ],
 }
 
 

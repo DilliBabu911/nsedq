@@ -111,7 +111,62 @@ CLAUDE_PROPOSALS = {
         "FUNCTIONAL_DEPENDENCY(pdays -> poutcome)",
     ],
 
-    # ── UCI Adult Census (32561 rows, 15 cols) ───────────────────────────────
+    # ── Wine Quality — UCI Red Wine (1599 rows, 12 cols) ────────────────────
+    # Schema: fixed acidity, volatile acidity, citric acid, residual sugar,
+    #         chlorides, free sulfur dioxide, total sulfur dioxide, density,
+    #         pH, sulphates, alcohol, quality
+    "wine_quality": [
+        # NOT_NULL for key measurement columns
+        "NOT_NULL(pH)",
+        "NOT_NULL(alcohol)",
+        "NOT_NULL(quality)",
+        "NOT_NULL(density)",
+        "NOT_NULL(sulphates)",
+        # Valid RANGE constraints grounded in published wine chemistry literature
+        "RANGE(pH, 2.5, 4.5, inclusive)",
+        "RANGE(alcohol, 8.0, 15.0, inclusive)",
+        "RANGE(quality, 3, 8, inclusive)",
+        "RANGE(free sulfur dioxide, 0, 80, inclusive)",
+        "RANGE(total sulfur dioxide, 0, 300, inclusive)",
+        "RANGE(fixed acidity, 4.0, 16.0, inclusive)",
+        "RANGE(volatile acidity, 0.1, 1.7, inclusive)",
+        "RANGE(density, 0.98, 1.01, inclusive)",
+        "RANGE(sulphates, 0.3, 2.1, inclusive)",
+        # GENUINELY UNSATISFIABLE: pH lower bound 5.0 > valid upper 4.5
+        "RANGE(pH, 5.0, 8.0, inclusive)",
+        # GENUINELY UNSATISFIABLE: quality lower 10 > valid upper 8
+        "RANGE(quality, 10, 12, inclusive)",
+    ],
+
+    # ── German Credit — Statlog (1000 rows, 21 cols) ─────────────────────────
+    # Schema: checking_account, duration, credit_history, purpose,
+    #         credit_amount, savings_account, employment, installment_rate,
+    #         personal_status, other_debtors, residence_since, property,
+    #         age, other_installment, housing, existing_credits,
+    #         job, num_dependents, telephone, foreign_worker, class
+    "german_credit": [
+        # NOT_NULL for critical financial attributes
+        "NOT_NULL(age)",
+        "NOT_NULL(credit_amount)",
+        "NOT_NULL(duration)",
+        "NOT_NULL(class)",
+        "NOT_NULL(installment_rate)",
+        "NOT_NULL(existing_credits)",
+        # Valid RANGE constraints from published dataset documentation
+        "RANGE(age, 18, 90, inclusive)",
+        "RANGE(duration, 1, 120, inclusive)",
+        "RANGE(credit_amount, 100, 25000, inclusive)",
+        "RANGE(installment_rate, 1, 4, inclusive)",
+        "RANGE(existing_credits, 1, 4, inclusive)",
+        "RANGE(num_dependents, 1, 2, inclusive)",
+        "RANGE(residence_since, 1, 4, inclusive)",
+        # GENUINELY UNSATISFIABLE: age lower 100 > valid upper 90
+        "RANGE(age, 100, 150, inclusive)",
+        # GENUINELY UNSATISFIABLE: duration lower 130 > valid upper 120
+        "RANGE(duration, 130, 200, inclusive)",
+        # FUNCTIONAL_DEPENDENCY: class is determined by credit risk profile
+        "FUNCTIONAL_DEPENDENCY(checking_account -> class)",
+    ],
     "uci_adult": [
         "NOT_NULL(age)",
         "NOT_NULL(education)",
@@ -162,7 +217,6 @@ def _dataset_key(dataset_name: str) -> str:
             return key
     # Fallback: first key
     return list(CLAUDE_PROPOSALS.keys())[0]
-
 
 def propose_constraints_claude(profiles: dict, schema_cols: list,
                                 dataset_name: str,

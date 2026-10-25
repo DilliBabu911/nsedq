@@ -19,8 +19,9 @@ DPI = 600
 with open(RES) as f:
     R = json.load(f)
 
-DATASETS = ["patient_records", "ibm_hr", "uci_bank", "uci_adult"]
-DS_LABELS = ["Patient\nRecords", "IBM HR\nAnalytics", "UCI Bank\nMarketing", "UCI Adult\nCensus"]
+DATASETS = ["patient_records", "ibm_hr", "uci_bank", "uci_adult", "wine_quality", "german_credit"]
+DS_LABELS = ["Patient\nRecords", "IBM HR\nAnalytics", "UCI Bank\nMktg", "UCI Adult\nCensus",
+             "Wine\nQuality", "German\nCredit"]
 
 C = {
     "nsedq":   "#1a5276",
@@ -94,7 +95,7 @@ def fig4():
     b8_iters = [get(ds, "B8_NSEDQ_Full",        "crl_iterations") for ds in DATASETS]
 
     x = np.arange(len(DATASETS)); w = 0.25
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(12, 5))
 
     b1b = ax.bar(x-w, b5_iters, w, label="LLM-Only / No SCV (B5)", color=C["red"],   edgecolor="white", zorder=3)
     b2b = ax.bar(x,   b6_iters, w, label="NSEDQ w/o MUC-CPC (B6)", color=C["amber"], edgecolor="white", zorder=3)
@@ -170,7 +171,7 @@ def fig6():
     acc_vals = [get(ds, "B8_NSEDQ_Full", "acceptance_rate") for ds in DATASETS]
 
     x = np.arange(len(DATASETS)); w = 0.25
-    fig, ax = plt.subplots(figsize=(9, 5))
+    fig, ax = plt.subplots(figsize=(12, 5))
 
     b1b = ax.bar(x-w, cts_vals, w, label="Mean CTS",             color=C["nsedq"], edgecolor="white", zorder=3)
     b2b = ax.bar(x,   gri_vals, w, label="Mean GRI",             color=C["green"],  edgecolor="white", zorder=3)
@@ -192,7 +193,7 @@ def fig6():
     ax.set_xticks(x); ax.set_xticklabels(DS_LABELS)
     ax.set_ylabel("Score (0–1)"); ax.set_ylim(0, 1.08)
     ax.legend(loc='lower right', framealpha=0.9, fontsize=7.5)
-    ax.set_title("Figure 6.  CTS, GRI, and Acceptance Rate — NSEDQ Full, Per Dataset\n"
+    ax.set_title("Figure 6.  CTS, GRI, and Acceptance Rate — NSEDQ Full, Six Datasets\n"
                  "(Mean CTS range: 0.847–0.854; Mean GRI: 0.895 across all accepted constraints)",
                  fontsize=10, fontweight='bold', pad=8)
     plt.tight_layout(pad=0.8)
@@ -325,7 +326,7 @@ def fig9():
         for ds in DATASETS
     ])
 
-    fig, ax = plt.subplots(figsize=(11, 5))
+    fig, ax = plt.subplots(figsize=(13, 6))
     cmap = plt.cm.YlOrRd
     im = ax.imshow(data, cmap=cmap, aspect='auto', vmin=0.20, vmax=1.00)
 
@@ -351,7 +352,7 @@ def fig9():
     cbar.set_label("DQTS Post-Repair Score", fontsize=8.5)
     cbar.ax.tick_params(labelsize=8)
     ax.set_title("Figure 9.  Data Quality Trust Score (DQTS) Post-Repair — Real Experimental Results\n"
-                 "All Systems × All Datasets (NSEDQ Full column highlighted)",
+                 "All Systems × Six Datasets (NSEDQ Full column highlighted)",
                  fontsize=10, fontweight='bold', pad=10)
     plt.tight_layout(pad=0.8)
     path = os.path.join(OUT, "fig9_dqts_heatmap.png")

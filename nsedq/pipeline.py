@@ -276,6 +276,8 @@ def _get_edqkg_match(constraint, dataset_name: str) -> str:
         "hr":      ["NOT_NULL","RANGE","FUNCTIONAL_DEPENDENCY"],
         "bank":    ["NOT_NULL","RANGE","PATTERN"],
         "adult":   ["NOT_NULL","RANGE","FUNCTIONAL_DEPENDENCY"],
+        "wine":    ["NOT_NULL","RANGE"],
+        "credit":  ["NOT_NULL","RANGE","FUNCTIONAL_DEPENDENCY"],
     }
     for key, ctypes in critical.items():
         if key in dataset_name.lower():
@@ -291,6 +293,8 @@ def _get_business_rules(dataset_name: str, ablate_edqkg: bool) -> list:
         "hr":      ["NOT_NULL","RANGE(Age","RANGE(MonthlyIncome"],
         "bank":    ["NOT_NULL","RANGE(age"],
         "adult":   ["NOT_NULL","FUNCTIONAL_DEPENDENCY"],
+        "wine":    ["NOT_NULL","RANGE(pH","RANGE(quality"],
+        "credit":  ["NOT_NULL","RANGE(age","RANGE(credit_amount"],
     }
     for key, rule_list in rules.items():
         if key in dataset_name.lower():

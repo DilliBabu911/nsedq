@@ -82,6 +82,28 @@ def load_datasets():
     ]
     datasets["uci_adult"] = (df_adult, gt_adult)
 
+    # ── Wine Quality (UCI Red Wine) ───────────────────────────────────────────
+    df_wine = pd.read_csv(os.path.join(DATA, "wine_quality.csv"))
+    for col in df_wine.columns:
+        df_wine[col] = pd.to_numeric(df_wine[col], errors="coerce")
+    # Sort by quality for temporal CGLE structure
+    df_wine = df_wine.sort_values("quality").reset_index(drop=True)
+    with open(os.path.join(DATA, "wine_quality_gt.json")) as f:
+        gt_wine = json.load(f)["ground_truth"]
+    datasets["wine_quality"] = (df_wine, gt_wine)
+
+    # ── German Credit (Statlog) ───────────────────────────────────────────────
+    df_credit = pd.read_csv(os.path.join(DATA, "german_credit.csv"))
+    for col in ["age", "duration", "credit_amount", "installment_rate",
+                "existing_credits", "num_dependents", "residence_since"]:
+        if col in df_credit.columns:
+            df_credit[col] = pd.to_numeric(df_credit[col], errors="coerce")
+    # Sort by age for temporal CGLE structure
+    df_credit = df_credit.sort_values("age").reset_index(drop=True)
+    with open(os.path.join(DATA, "german_credit_gt.json")) as f:
+        gt_credit = json.load(f)["ground_truth"]
+    datasets["german_credit"] = (df_credit, gt_credit)
+
     return datasets
 
 
